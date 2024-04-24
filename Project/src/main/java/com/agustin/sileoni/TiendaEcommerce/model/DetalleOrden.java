@@ -1,30 +1,42 @@
 package com.agustin.sileoni.TiendaEcommerce.model;
 
-public class DetalleOrden {
+import jakarta.persistence.*;
 
-    private Integer id;
+import java.util.List;
+
+@Entity
+@Table(name = "DetallesOrden")
+public class DetalleOrden {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer idDetalleOrden;
     private String nombre;
     private double cantidad;
     private double precio;
     private double total;
+    @OneToOne
+    private Orden orden;
+    @OneToOne
+    private Producto producto;
+
 
     public DetalleOrden() {
     }
 
-    public DetalleOrden(Integer id, String nombre, double cantidad, double precio, double total) {
-        this.id = id;
+    public DetalleOrden(Integer idDetalleOrden, String nombre, double cantidad, double precio, double total) {
+        this.idDetalleOrden = idDetalleOrden;
         this.nombre = nombre;
         this.cantidad = cantidad;
         this.precio = precio;
         this.total = total;
     }
 
-    public Integer getId() {
-        return id;
+    public Integer getIdDetalleOrden() {
+        return idDetalleOrden;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
+    public void setIdDetalleOrden(Integer idDetalleOrden) {
+        this.idDetalleOrden = idDetalleOrden;
     }
 
     public String getNombre() {
@@ -59,10 +71,26 @@ public class DetalleOrden {
         this.total = total;
     }
 
+    public Orden getOrden() {
+        return orden;
+    }
+
+    public void setOrden(Orden orden) {
+        this.orden = orden;
+    }
+
+    public Producto getProducto() {
+        return producto;
+    }
+
+    public void setProducto(Producto producto) {
+        this.producto = producto;
+    }
+
     @Override
     public String toString() {
         return "DetalleOrden{" +
-                "id=" + id +
+                "idDetalleOrden=" + idDetalleOrden +
                 ", nombre='" + nombre + '\'' +
                 ", cantidad=" + cantidad +
                 ", precio=" + precio +

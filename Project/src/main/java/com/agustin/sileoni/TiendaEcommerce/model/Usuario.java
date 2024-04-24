@@ -1,7 +1,15 @@
 package com.agustin.sileoni.TiendaEcommerce.model;
 
+import jakarta.persistence.*;
+
+import java.util.List;
+
+@Entity
+@Table(name = "Usuarios")
 public class Usuario {
-    private Integer id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer idUsuario;
     private String nombre;
     private String telefono;
     private String tipo;
@@ -9,9 +17,13 @@ public class Usuario {
     private String username;
     private String email;
     private String direccion;
+    @OneToMany(mappedBy = "usuario")
+    private List<Producto> productos;
+    @OneToMany(mappedBy = "usuario")
+    private List<Orden> ordenes;
 
-    public Usuario(Integer id, String nombre, String telefono, String tipo, String password, String username, String email, String direccion) {
-        this.id = id;
+    public Usuario(Integer idUsuario, String nombre, String telefono, String tipo, String password, String username, String email, String direccion) {
+        this.idUsuario = idUsuario;
         this.nombre = nombre;
         this.telefono = telefono;
         this.tipo = tipo;
@@ -24,12 +36,12 @@ public class Usuario {
     public Usuario() {
     }
 
-    public Integer getId() {
-        return id;
+    public Integer getIdUsuario() {
+        return idUsuario;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
+    public void setIdUsuario(Integer idUsuario) {
+        this.idUsuario = idUsuario;
     }
 
     public String getNombre() {
@@ -88,10 +100,18 @@ public class Usuario {
         this.direccion = direccion;
     }
 
+    public List<Producto> getProductos() {
+        return productos;
+    }
+
+    public void setProductos(List<Producto> productos) {
+        this.productos = productos;
+    }
+
     @Override
     public String toString() {
         return "Usuario{" +
-                "id=" + id +
+                "idUsuario=" + idUsuario +
                 ", nombre='" + nombre + '\'' +
                 ", telefono='" + telefono + '\'' +
                 ", tipo='" + tipo + '\'' +

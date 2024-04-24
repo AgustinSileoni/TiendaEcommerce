@@ -1,33 +1,43 @@
 package com.agustin.sileoni.TiendaEcommerce.model;
 
+import jakarta.persistence.*;
+
+@Entity
+@Table(name = "Productos")
 public class Producto {
 
-    private Integer id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer idProducto;
     private String nombre;
     private String descripcion;
     private String imagen;
     private  double precio;
     private int cantidad;
+    @ManyToOne
+    private Usuario usuario;
+
 
     public Producto(){
 
     }
 
-    public Producto(Integer id, String nombre, String descripcion, String imagen, double precio, int cantidad) {
-        this.id = id;
+    public Producto(Integer idProducto, String nombre, String descripcion, String imagen, double precio, int cantidad, Usuario usuario) {
+        this.idProducto = idProducto;
         this.nombre = nombre;
         this.descripcion = descripcion;
         this.imagen = imagen;
         this.precio = precio;
         this.cantidad = cantidad;
+        this.usuario = usuario;
     }
 
-    public Integer getId() {
-        return id;
+    public Integer getIdProducto() {
+        return idProducto;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
+    public void setIdProducto(Integer idProducto) {
+        this.idProducto = idProducto;
     }
 
     public String getNombre() {
@@ -70,10 +80,18 @@ public class Producto {
         this.cantidad = cantidad;
     }
 
+    public Usuario getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
+    }
+
     @Override
     public String toString() {
         return "Producto{" +
-                "id=" + id +
+                "idProducto=" + idProducto +
                 ", nombre='" + nombre + '\'' +
                 ", descripcion='" + descripcion + '\'' +
                 ", imagen='" + imagen + '\'' +

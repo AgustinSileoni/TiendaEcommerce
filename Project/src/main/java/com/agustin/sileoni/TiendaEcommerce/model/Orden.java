@@ -1,33 +1,42 @@
 package com.agustin.sileoni.TiendaEcommerce.model;
 
+import jakarta.persistence.*;
+
 import java.util.Date;
 
+@Entity
+@Table(name = "Ordenes")
 public class Orden {
 
-    private Integer id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer idOrden;
     private String numero;
     private Date fechaCreacion;
     private Date fechaRecibida;
     private double total;
-
+    @ManyToOne()
+    private Usuario usuario;
+    @OneToOne(mappedBy = "orden")
+    private DetalleOrden detalleOrden;
 
     public Orden() {
     }
 
-    public Orden(Integer id, String numero, Date fechaCreacion, Date fechaRecibida, double total) {
-        this.id = id;
+    public Orden(Integer idOrden, String numero, Date fechaCreacion, Date fechaRecibida, double total) {
+        this.idOrden = idOrden;
         this.numero = numero;
         this.fechaCreacion = fechaCreacion;
         this.fechaRecibida = fechaRecibida;
         this.total = total;
     }
 
-    public Integer getId() {
-        return id;
+    public Integer getIdOrden() {
+        return idOrden;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
+    public void setIdOrden(Integer idOrden) {
+        this.idOrden = idOrden;
     }
 
     public String getNumero() {
@@ -62,10 +71,26 @@ public class Orden {
         this.total = total;
     }
 
+    public Usuario getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
+    }
+
+    public DetalleOrden getDetalleOrden() {
+        return detalleOrden;
+    }
+
+    public void setDetalleOrden(DetalleOrden detalleOrden) {
+        this.detalleOrden = detalleOrden;
+    }
+
     @Override
     public String toString() {
         return "Orden{" +
-                "id=" + id +
+                "idOrden=" + idOrden +
                 ", numero='" + numero + '\'' +
                 ", fechaCreacion=" + fechaCreacion +
                 ", fechaRecibida=" + fechaRecibida +
