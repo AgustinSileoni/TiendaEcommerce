@@ -1,0 +1,21 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "TiendaEcommerceApplication",
+            "request": "launch",
+            "mainClass": "com.agustin.sileoni.TiendaEcommerce.TiendaEcommerceApplication",
+            "projectName": "Project"
+        },
+        {
+            "type": "java",
+            "name": "Spring Boot-TiendaEcommerceApplication<TiendaEcommerce>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "com.agustin.sileoni.TiendaEcommerce.TiendaEcommerceApplication",
+            "projectName": "TiendaEcommerce",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        }
+    ]
+}
