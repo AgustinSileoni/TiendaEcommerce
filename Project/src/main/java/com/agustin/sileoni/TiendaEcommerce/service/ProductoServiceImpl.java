@@ -3,10 +3,12 @@ package com.agustin.sileoni.TiendaEcommerce.service;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.agustin.sileoni.TiendaEcommerce.model.Producto;
 import com.agustin.sileoni.TiendaEcommerce.repository.ProductoRepository;
 
+@Service
 public class ProductoServiceImpl implements ProductoService{
 
     @Autowired
