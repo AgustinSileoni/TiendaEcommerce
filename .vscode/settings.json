@@ -2,5 +2,6 @@
     "java.compile.nullAnalysis.mode": "automatic",
     "cSpell.words": [
         "thymeleaf"
-    ]
+    ],
+    "java.configuration.updateBuildConfiguration": "interactive"
 }
