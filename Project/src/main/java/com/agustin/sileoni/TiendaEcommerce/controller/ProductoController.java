@@ -1,5 +1,6 @@
 package com.agustin.sileoni.TiendaEcommerce.controller;
 
+import java.io.IOException;
 import java.util.Optional;
 
 import org.slf4j.Logger;
@@ -15,8 +16,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import com.agustin.sileoni.TiendaEcommerce.model.Producto;
 import com.agustin.sileoni.TiendaEcommerce.model.Usuario;
 import com.agustin.sileoni.TiendaEcommerce.service.ProductoServiceImpl;
+import com.agustin.sileoni.TiendaEcommerce.service.UploadFileService;
+
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 
 
@@ -33,6 +37,9 @@ public class ProductoController {
     @Autowired
     private ProductoServiceImpl productoService;
 
+    @Autowired
+    private UploadFileService uploadFileService;
+
     //El objeto Model lleva informacion desde el backend hacia la vista
     @GetMapping("")
     public String show(Model model) {
@@ -45,12 +52,16 @@ public class ProductoController {
         return "productos/create";
     }
     
+    //@RequesParam trae el valor de la etiqueta llamada img
     @PostMapping("/save")
-    public String save(Producto producto) {
+    public String save(Producto producto, @RequestParam("img") MultipartFile file) throws IOException {
         //LOGGER.info("Este es el objeto producto {}", producto);
         Usuario user = new Usuario(2,"","","","","","","");
+        
         producto.setUsuario(user);
+        saveImageInProduct(producto, file);
         productoService.save(producto);
+
         return "redirect:/productos";
     }
 
@@ -67,20 +78,41 @@ public class ProductoController {
     }
     
     @PostMapping("/update")
-    public String update(Producto producto) {
+    public String update(Producto producto,@RequestParam("img") MultipartFile file) throws IOException {
+        Producto productOld = productoService.get(producto.getIdProducto()).get();
+        producto.setUsuario(productOld.getUsuario());
+        String imageToUpdateFromProduct = productOld.getImagen();
+        if(file.isEmpty()){
+            producto.setImagen(imageToUpdateFromProduct);
+        }
+        else{
+            uploadFileService.delete(imageToUpdateFromProduct);
+            saveImageInProduct(producto, file);
+        }
+
+        
         productoService.update(producto);
         return "redirect:/productos";        
     }
 
     @GetMapping("delete/{id}")
-    public String delete(@PathVariable("id") Integer id) {
-        productoService.delete(id);
+    public String delete(@PathVariable("id") Integer idProducto) {
+        String imageFromProductToDelete = productoService.get(idProducto).get().getImagen();
+         if (!isDefaultImage(imageFromProductToDelete)) {
+             uploadFileService.delete(imageFromProductToDelete);
+         }
+        productoService.delete(idProducto);
         return"redirect:/productos";
     }
-    
-    
-    
 
+    
+    private void saveImageInProduct(Producto producto , MultipartFile imageToSave) throws IOException{
+        String nombreImagen = uploadFileService.saveImage(imageToSave);        
+        producto.setImagen(nombreImagen);
+    }
 
+    private boolean isDefaultImage(String nameImage){
+        return nameImage.equals("default.jpg");
+    }
 
 }
