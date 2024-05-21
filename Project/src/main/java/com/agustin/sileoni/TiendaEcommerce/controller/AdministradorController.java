@@ -27,12 +27,6 @@ public class AdministradorController {
         return "administrador/home";
     }
 
-    @GetMapping("/prueba")
-    public String prueba() {
-        return "administrador/template_admin";
-    }
-    
-
 
 }
 
