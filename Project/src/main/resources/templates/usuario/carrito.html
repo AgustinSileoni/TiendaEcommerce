@@ -1,25 +1,25 @@
 <!DOCTYPE html>
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
 
-<head>
+  <head>
 
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <meta name="description" content="">
-  <meta name="author" content="">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
 
-  <title>Spring eCommerce</title>
+    <title>Spring eCommerce</title>
 
 
-  <!-- Bootstrap core CSS -->
-  <link th:href="@{vendor/bootstrap/css/bootstrap.min.css}" rel="stylesheet">
+    <!-- Bootstrap core CSS -->
+    <link th:href="@{vendor/bootstrap/css/bootstrap.min.css}" rel="stylesheet">
 
-  <!-- Custom styles for this template -->
-  <link th:href="@{css/heroic-features.css}" rel="stylesheet">
+    <!-- Custom styles for this template -->
+    <link th:href="@{css/heroic-features.css}" rel="stylesheet">
 
-</head>
+  </head>
 
-<body>
+  <body>
 
     <!-- Navigation -->
     <div th:insert="~{usuario/template_user.html::header}"></div>
@@ -59,7 +59,7 @@
                   <td th:text="${detalleOrden.precio}">Precio</td>
                   <td th:text="${detalleOrden.cantidad}">Cantidad</td>
                   <td th:text="${detalleOrden.total}">Total</td>
-                  <td><a href="#" class="btn btn-danger">Quitar</a></td>
+                  <td>  <a th:href="@{cart/delete/{id} (id=${detalleOrden.producto.idProducto})}" class="btn btn-danger">Quitar</a></td>
                 </tr>
               </tbody>
             </table>
