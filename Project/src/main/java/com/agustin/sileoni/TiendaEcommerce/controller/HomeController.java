@@ -15,7 +15,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.agustin.sileoni.TiendaEcommerce.model.DetalleOrden;
 import com.agustin.sileoni.TiendaEcommerce.model.Orden;
 import com.agustin.sileoni.TiendaEcommerce.model.Producto;
-import com.agustin.sileoni.TiendaEcommerce.service.ProductoService;
+import com.agustin.sileoni.TiendaEcommerce.model.Usuario;
+import com.agustin.sileoni.TiendaEcommerce.service.IProductoService;
+import com.agustin.sileoni.TiendaEcommerce.service.IUsuarioService;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -36,7 +38,9 @@ public class HomeController {
     Orden orden = new Orden();
 
     @Autowired
-    private ProductoService productoService;
+    private IProductoService productoService;
+    @Autowired
+    private IUsuarioService usuarioService;
 
     @GetMapping("")
     public String home(Model model) {
@@ -67,44 +71,32 @@ public class HomeController {
                 if (detalleOrden.getProducto().getIdProducto()==id){
                     detalleOrden.setCantidad(detalleOrden.getCantidad()+cantidad);
                     detalleOrden.setTotal(detalleOrden.getTotal()+(cantidad)*detalleOrden.getPrecio());
-                }
-                else{
-                    
+                    break;
                 }
             }
         }
         else{
-            DetalleOrden detalleOrden = new DetalleOrden();
-            double sumaTotal = 0;
-
-            detalleOrden.setCantidad(cantidad);
-            detalleOrden.setNombre(producto.getNombre());
-            detalleOrden.setPrecio(producto.getPrecio());
-            detalleOrden.setTotal(producto.getPrecio() * cantidad);
-            detalleOrden.setProducto(producto);
-            
+            DetalleOrden detalleOrden = new DetalleOrden(producto,cantidad);
             listaDetallesOrden.add(detalleOrden);
-            sumaTotal = listaDetallesOrden.stream().mapToDouble(dt-> dt.getTotal()).sum();
-            orden.setTotal(sumaTotal);
-            
         }
+
+        double sumaTotal = 0;
+        sumaTotal = listaDetallesOrden.stream().mapToDouble(dt-> dt.getTotal()).sum();
+        orden.setTotal(sumaTotal);
 
         model.addAttribute("cart", listaDetallesOrden);
         model.addAttribute("orden", orden);
 
-        log.info("Datos de la lista {}", listaDetallesOrden);
-        log.info("Datos de la orden",orden );
-
         return "usuario/carrito";
     }
 
-    @GetMapping("cart/delete/{id}")
-    public String deleteProductoCart(@PathVariable("id") Integer id, Model model) {
+    @GetMapping("delete/{id}")
+    public String deleteProductoCart(@PathVariable("id") Integer idProducto, Model model) {
         
-         List<DetalleOrden> ordenesNuevas =  new ArrayList<DetalleOrden>();
+        List<DetalleOrden> ordenesNuevas =  new ArrayList<DetalleOrden>();
 
         for(DetalleOrden detalleOrden:listaDetallesOrden){
-            if(detalleOrden.getProducto().getIdProducto()!=id){
+            if(detalleOrden.getProducto().getIdProducto()!=idProducto){
                 ordenesNuevas.add(detalleOrden);
             }
         }
@@ -116,9 +108,7 @@ public class HomeController {
         model.addAttribute("cart", listaDetallesOrden);
         model.addAttribute("orden",orden);
 
-        log.info("Datos de la lista {}", listaDetallesOrden);
-        log.info("Datos de la orden",orden );
-        return "/usuario/carrito";
+        return "redirect:/getCart";
     }
     
     @GetMapping("/getCart")
@@ -127,8 +117,18 @@ public class HomeController {
         model.addAttribute("orden", orden);
         return "/usuario/carrito";
     }
+
+    @GetMapping("/order")
+    public String order(Model model) {
+
+        Usuario usuario = usuarioService.get(3).get();
+
+        model.addAttribute("cart", listaDetallesOrden);
+        model.addAttribute("orden", orden);
+        model.addAttribute("usuario", usuario);
     
-    
+        return "usuario/resumenorden";
+    }
 
 
 }

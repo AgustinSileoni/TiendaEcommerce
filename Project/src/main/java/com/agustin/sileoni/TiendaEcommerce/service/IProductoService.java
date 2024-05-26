@@ -5,7 +5,7 @@ import java.util.Optional;
 
 import com.agustin.sileoni.TiendaEcommerce.model.Producto;
 
-public interface ProductoService {
+public interface IProductoService {
     public Producto save(Producto producto);
     public Optional<Producto> get(Integer id);
     public List<Producto> findAll();

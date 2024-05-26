@@ -18,7 +18,6 @@ import com.agustin.sileoni.TiendaEcommerce.model.Usuario;
 import com.agustin.sileoni.TiendaEcommerce.service.ProductoServiceImpl;
 import com.agustin.sileoni.TiendaEcommerce.service.UploadFileService;
 
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
