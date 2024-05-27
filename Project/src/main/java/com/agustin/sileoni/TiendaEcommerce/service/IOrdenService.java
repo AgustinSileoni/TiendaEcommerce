@@ -12,4 +12,5 @@ public interface IOrdenService {
     public List<Orden> findAll();
     public void update(Orden orden);
     public void delete(Integer id);   
+    public String generarNumeroOrden();
 }

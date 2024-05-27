@@ -2,6 +2,7 @@ package com.agustin.sileoni.TiendaEcommerce.service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.ArrayList;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -28,8 +29,7 @@ public class OrdenServiceImpl implements IOrdenService{
 
     @Override
     public List<Orden> findAll() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'findAll'");
+        return ordenRepository.findAll();
     }
 
     @Override
@@ -42,6 +42,32 @@ public class OrdenServiceImpl implements IOrdenService{
     public void delete(Integer id) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'delete'");
+    }
+
+
+    public String generarNumeroOrden(){
+        int numero = 0;
+        
+        List<Orden> ordenes = findAll();
+        List<Integer> numeros = new ArrayList<Integer>();
+
+        ordenes.stream().forEach(o -> numeros.add( Integer.parseInt(o.getNumero())));
+
+        if(ordenes.isEmpty()){
+            numero=1;
+        }
+        else{
+            numero= numeros.stream().max(Integer::compare).get();
+            numero++;
+        }
+
+        String numeroString = String.valueOf(numero);
+        while (numeroString.length() < 10) {
+            numeroString = "0"+numeroString;
+        }
+
+        return numeroString;
+
     }
     
 }

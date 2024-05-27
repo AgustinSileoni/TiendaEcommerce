@@ -3,6 +3,8 @@ package com.agustin.sileoni.TiendaEcommerce.controller;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Date;
+import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,12 +18,15 @@ import com.agustin.sileoni.TiendaEcommerce.model.DetalleOrden;
 import com.agustin.sileoni.TiendaEcommerce.model.Orden;
 import com.agustin.sileoni.TiendaEcommerce.model.Producto;
 import com.agustin.sileoni.TiendaEcommerce.model.Usuario;
+import com.agustin.sileoni.TiendaEcommerce.service.IDetalleOrdenService;
+import com.agustin.sileoni.TiendaEcommerce.service.IOrdenService;
 import com.agustin.sileoni.TiendaEcommerce.service.IProductoService;
 import com.agustin.sileoni.TiendaEcommerce.service.IUsuarioService;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+
 
 
 
@@ -41,6 +46,10 @@ public class HomeController {
     private IProductoService productoService;
     @Autowired
     private IUsuarioService usuarioService;
+    @Autowired
+    private IOrdenService ordenService;
+    @Autowired
+    private IDetalleOrdenService detalleOrdenService;
 
     @GetMapping("")
     public String home(Model model) {
@@ -129,6 +138,39 @@ public class HomeController {
     
         return "usuario/resumenorden";
     }
+
+    @GetMapping("/saveOrder")
+    public String saveOrder() {
+        Date fechaCreacion = new Date();
+        orden.setFechaCreacion(fechaCreacion);
+        orden.setNumero(ordenService.generarNumeroOrden());
+        orden.setUsuario(usuarioService.get(1).get());
+
+        ordenService.save(orden);
+
+        
+
+        for(DetalleOrden dt:listaDetallesOrden){
+            log.info("Id detalle orden {}", dt.getIdDetalleOrden());
+            dt.setOrden(orden);
+            detalleOrdenService.save(dt);
+        }
+
+        orden = new Orden();
+        listaDetallesOrden.clear();
+
+        return "redirect:/";
+    }
+
+    @PostMapping("/search")
+    public String searchProduct(@RequestParam String nombre,Model model) {
+        log.info("Nombre del producto: {}",nombre);
+        List<Producto> productos = productoService.findAll().stream().filter(p -> p.getNombre().contains(nombre)).collect(Collectors.toList());
+        log.info("Nombre del producto: {}",productos);
+        return "usuario/home";
+    }
+    
+    
 
 
 }
