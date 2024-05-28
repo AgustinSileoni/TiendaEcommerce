@@ -22,26 +22,22 @@ public class DetalleOrdenServiceImpl implements IDetalleOrdenService{
 
     @Override
     public Optional<DetalleOrden> get(Integer id) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'get'");
+        return detalleOrdenRepository.findById(id);
     }
 
     @Override
     public List<DetalleOrden> findAll() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'findAll'");
+        return detalleOrdenRepository.findAll();
     }
 
     @Override
     public void update(DetalleOrden orden) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'update'");
+        detalleOrdenRepository.save(orden);
     }
 
     @Override
     public void delete(Integer id) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'delete'");
+        detalleOrdenRepository.deleteById(id);
     }
     
 }

@@ -23,8 +23,7 @@ public class OrdenServiceImpl implements IOrdenService{
 
     @Override
     public Optional<Orden> get(Integer id) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'get'");
+        return ordenRepository.findById(id);
     }
 
     @Override
@@ -34,14 +33,12 @@ public class OrdenServiceImpl implements IOrdenService{
 
     @Override
     public void update(Orden orden) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'update'");
+        ordenRepository.save(orden);
     }
 
     @Override
     public void delete(Integer id) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'delete'");
+        ordenRepository.deleteById(id);
     }
 
 

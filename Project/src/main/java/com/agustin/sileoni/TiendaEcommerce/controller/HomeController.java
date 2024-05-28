@@ -168,9 +168,7 @@ public class HomeController {
         List<Producto> productos = productoService.findAll().stream().filter(p -> p.getNombre().contains(nombre)).collect(Collectors.toList());
         log.info("Nombre del producto: {}",productos);
         return "usuario/home";
-    }
-    
-    
+    } 
 
 
 }
