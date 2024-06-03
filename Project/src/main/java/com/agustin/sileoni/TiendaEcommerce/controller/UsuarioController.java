@@ -6,8 +6,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.agustin.sileoni.TiendaEcommerce.model.Usuario;
 import com.agustin.sileoni.TiendaEcommerce.service.IUsuarioService;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+
 
 
 @Controller
@@ -25,19 +28,22 @@ public class UsuarioController {
     }
     
     @GetMapping("/login")
-    public String create() {
+    public String login() {
         return "usuario/login";
     }
     
-    // @PostMapping("/save")
-    // public String saveUsuario(Usuario usuario) {
-
-    //     usuario.setTipo("USER");
-    //     logger.info("Usuario registro: {}", usuario);
-    //     usuarioService.save(usuario);
-
-    //     return "redirect:/";
-    // }
+     @GetMapping("/registro")
+     public String create() {
+        return "usuario/registro";
+    }
+    
+    @PostMapping("/save")
+    public String save(Usuario usuario) {
+        usuario.setTipo("USER");
+        usuarioService.save(usuario);
+        logger.info("Usuario registrado {}",usuario);
+        return "redirect:/";
+    }
     
 
 
