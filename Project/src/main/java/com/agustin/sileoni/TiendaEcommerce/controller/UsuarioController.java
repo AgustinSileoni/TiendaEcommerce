@@ -6,13 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.agustin.sileoni.TiendaEcommerce.model.Usuario;
 import com.agustin.sileoni.TiendaEcommerce.service.IUsuarioService;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-
-
-
 
 
 @Controller
@@ -26,24 +21,23 @@ public class UsuarioController {
 
     @GetMapping("")
     public String getMethodName() {
-        return "usuario/registrousuario";
+        return "usuario/registro";
     }
     
-
-    @GetMapping("/registro")
+    @GetMapping("/login")
     public String create() {
-        return "redirect:/usuario";
+        return "usuario/login";
     }
     
-    @PostMapping("/save")
-    public String saveUsuario(Usuario usuario) {
+    // @PostMapping("/save")
+    // public String saveUsuario(Usuario usuario) {
 
-        usuario.setTipo("USER");
-        logger.info("Usuario registro: {}", usuario);
-        usuarioService.save(usuario);
+    //     usuario.setTipo("USER");
+    //     logger.info("Usuario registro: {}", usuario);
+    //     usuarioService.save(usuario);
 
-        return "redirect:/";
-    }
+    //     return "redirect:/";
+    // }
     
 
 

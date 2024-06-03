@@ -19,5 +19,6 @@
             "username": "root",
             "name": "VSCODE"
         }
-    ]
+    ],
+    "java.debug.settings.onBuildFailureProceed": true
 }

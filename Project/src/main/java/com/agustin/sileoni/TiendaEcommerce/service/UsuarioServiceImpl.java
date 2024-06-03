@@ -40,5 +40,10 @@ public class UsuarioServiceImpl implements IUsuarioService{
         usuarioRepository.deleteById(id);;
     }
 
+    @Override
+    public Optional<Usuario> findById(int id) {
+        return usuarioRepository.findById(id);
+    }
+
     
 }

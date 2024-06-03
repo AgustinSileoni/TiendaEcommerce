@@ -23,6 +23,8 @@ import com.agustin.sileoni.TiendaEcommerce.service.IOrdenService;
 import com.agustin.sileoni.TiendaEcommerce.service.IProductoService;
 import com.agustin.sileoni.TiendaEcommerce.service.IUsuarioService;
 
+import jakarta.servlet.http.HttpSession;
+
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -52,11 +54,29 @@ public class HomeController {
     private IDetalleOrdenService detalleOrdenService;
 
     @GetMapping("")
-    public String home(Model model) {
+    public String home(Model model, HttpSession httpSession) {
+
+        log.info("Sesion del usuario: {}", httpSession.getAttribute("idUsuario"));
+        
         model.addAttribute("productos", productoService.findAll());
         model.addAttribute("cart", listaDetallesOrden);
         model.addAttribute("orden",orden);
-        return "usuario/home";
+
+        if (httpSession.getAttribute("idUsuario")!= null){
+            Optional<Usuario> usuario = usuarioService.findById(Integer.parseInt(httpSession.getAttribute("idUsuario").toString()));
+            if(usuario.get().getTipo().equals("ADMIN")){
+                return "redirect:/administrador";
+           }
+           else{
+                return "usuario/home";
+           }
+        }
+        else{
+            return "usuario/home";
+        }
+        
+
+
     }
 
     @GetMapping("productoHome/{id}")
@@ -77,8 +97,8 @@ public class HomeController {
 
         if(ingresado){
             for (DetalleOrden detalleOrden: listaDetallesOrden){
-                if (detalleOrden.getProducto().getIdProducto()==id){
-                    detalleOrden.setCantidad(detalleOrden.getCantidad()+cantidad);
+                if (producto.getIdProducto()==id){
+                    detalleOrden.setCantidad(producto.getCantidad()+cantidad);
                     detalleOrden.setTotal(detalleOrden.getTotal()+(cantidad)*detalleOrden.getPrecio());
                     break;
                 }
@@ -128,36 +148,44 @@ public class HomeController {
     }
 
     @GetMapping("/order")
-    public String order(Model model) {
+    public String order(Model model, HttpSession httpSession) {
 
-        Usuario usuario = usuarioService.get(3).get();
+        if(httpSession.getAttribute("idUsuario") == null ){
+            log.info("Tenes que iniciar sesion");
+            return "redirect:/usuario/login";
+        }
+        
+        Usuario usuario = usuarioService.findById(Integer.parseInt(httpSession.getAttribute("idUsuario").toString())).get();
 
         model.addAttribute("cart", listaDetallesOrden);
         model.addAttribute("orden", orden);
         model.addAttribute("usuario", usuario);
     
-        return "usuario/resumenorden";
+        return "usuario/carrito";
     }
 
     @GetMapping("/saveOrder")
-    public String saveOrder() {
+    public String saveOrder(HttpSession httpSession) {
         Date fechaCreacion = new Date();
         orden.setFechaCreacion(fechaCreacion);
         orden.setNumero(ordenService.generarNumeroOrden());
-        orden.setUsuario(usuarioService.get(1).get());
+        log.info("El mumero es: {}",orden.getNumero());
+        Usuario usuario = usuarioService.findById(1).get();
+        
+        orden.setUsuario(usuario);
 
         ordenService.save(orden);
 
-        
-
         for(DetalleOrden dt:listaDetallesOrden){
-            log.info("Id detalle orden {}", dt.getIdDetalleOrden());
             dt.setOrden(orden);
             detalleOrdenService.save(dt);
         }
 
         orden = new Orden();
         listaDetallesOrden.clear();
+
+        log.info("Orden nueva",orden);
+
 
         return "redirect:/";
     }

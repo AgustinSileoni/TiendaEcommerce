@@ -11,5 +11,6 @@ public interface IUsuarioService {
     public List<Usuario> findAll();
     public void update(Usuario usuario);
     public void delete(Integer id);
+    public Optional<Usuario> findById(int int1);
 
 }
