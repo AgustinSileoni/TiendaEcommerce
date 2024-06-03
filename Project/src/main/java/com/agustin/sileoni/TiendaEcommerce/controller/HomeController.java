@@ -169,8 +169,8 @@ public class HomeController {
         Date fechaCreacion = new Date();
         orden.setFechaCreacion(fechaCreacion);
         orden.setNumero(ordenService.generarNumeroOrden());
-        log.info("El mumero es: {}",orden.getNumero());
-        int id  = Integer.parseInt(httpSession.getId());
+
+        int id  = Integer.parseInt(httpSession.getAttribute("idUsuario").toString());
         Usuario usuario = usuarioService.findById(id).get();
         
         orden.setUsuario(usuario);

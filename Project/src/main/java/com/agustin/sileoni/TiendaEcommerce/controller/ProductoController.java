@@ -15,8 +15,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.agustin.sileoni.TiendaEcommerce.model.Producto;
 import com.agustin.sileoni.TiendaEcommerce.model.Usuario;
+import com.agustin.sileoni.TiendaEcommerce.service.IProductoService;
+import com.agustin.sileoni.TiendaEcommerce.service.IUsuarioService;
 import com.agustin.sileoni.TiendaEcommerce.service.ProductoServiceImpl;
 import com.agustin.sileoni.TiendaEcommerce.service.UploadFileService;
+import com.agustin.sileoni.TiendaEcommerce.service.UsuarioServiceImpl;
+
+import jakarta.servlet.http.HttpSession;
 
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
@@ -34,10 +39,13 @@ public class ProductoController {
     private final Logger LOGGER = LoggerFactory.getLogger(ProductoController.class);
 
     @Autowired
-    private ProductoServiceImpl productoService;
+    private IProductoService productoService;
 
     @Autowired
     private UploadFileService uploadFileService;
+
+    @Autowired
+    private IUsuarioService usuarioService;
 
     //El objeto Model lleva informacion desde el backend hacia la vista
     @GetMapping("")
@@ -53,11 +61,13 @@ public class ProductoController {
     
     //@RequesParam trae el valor de la etiqueta llamada img
     @PostMapping("/save")
-    public String save(Producto producto, @RequestParam("img") MultipartFile file) throws IOException {
+    public String save(Producto producto, @RequestParam("img") MultipartFile file, HttpSession httpSession) throws IOException {
         //LOGGER.info("Este es el objeto producto {}", producto);
-        Usuario user = new Usuario(2,"","","","","","","");
         
-        producto.setUsuario(user);
+        int id  = Integer.parseInt(httpSession.getAttribute("idUsuario").toString());
+        Usuario usuario = usuarioService.findById(id).get();
+
+        producto.setUsuario(usuario);
         saveImageInProduct(producto, file);
         productoService.save(producto);
 
