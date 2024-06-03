@@ -2,7 +2,6 @@ package com.agustin.sileoni.TiendaEcommerce.model;
 
 import jakarta.persistence.*;
 
-import java.util.ArrayList;
 import java.util.Date;
 
 
@@ -20,8 +19,8 @@ public class Orden {
     private double total;
     @ManyToOne()
     private Usuario usuario;
-    @OneToMany(mappedBy = "orden")
-    private ArrayList<DetalleOrden> detalleOrden;
+    @OneToOne
+    private DetalleOrden detalleOrden;
 
     public Orden() {
     }
@@ -82,11 +81,11 @@ public class Orden {
         this.usuario = usuario;
     }
 
-    public ArrayList<DetalleOrden> getDetalleOrden() {
+    public DetalleOrden getDetalleOrden() {
         return detalleOrden;
     }
 
-    public void setDetalleOrden(ArrayList<DetalleOrden> detalleOrden) {
+    public void setDetalleOrden(DetalleOrden detalleOrden) {
         this.detalleOrden = detalleOrden;
     }
 
