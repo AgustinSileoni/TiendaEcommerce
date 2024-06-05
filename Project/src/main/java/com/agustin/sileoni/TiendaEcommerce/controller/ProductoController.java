@@ -17,9 +17,7 @@ import com.agustin.sileoni.TiendaEcommerce.model.Producto;
 import com.agustin.sileoni.TiendaEcommerce.model.Usuario;
 import com.agustin.sileoni.TiendaEcommerce.service.IProductoService;
 import com.agustin.sileoni.TiendaEcommerce.service.IUsuarioService;
-import com.agustin.sileoni.TiendaEcommerce.service.ProductoServiceImpl;
 import com.agustin.sileoni.TiendaEcommerce.service.UploadFileService;
-import com.agustin.sileoni.TiendaEcommerce.service.UsuarioServiceImpl;
 
 import jakarta.servlet.http.HttpSession;
 

@@ -59,11 +59,12 @@ public class HomeController {
         log.info("Sesion del usuario: {}", httpSession.getAttribute("idUsuario"));
         
         model.addAttribute("productos", productoService.findAll());
-        model.addAttribute("cart", listaDetallesOrden);
-        model.addAttribute("orden",orden);
-
+        model.addAttribute("session", httpSession.getAttribute("idUsuario"));
+        model.addAttribute("nombre", "null");
         if (httpSession.getAttribute("idUsuario")!= null){
             Optional<Usuario> usuario = usuarioService.findById(Integer.parseInt(httpSession.getAttribute("idUsuario").toString()));
+            model.addAttribute("nombre", usuario.get().getNombre());
+            log.info("Nombre : ", model.getAttribute("nombre"));
             if(usuario.get().getTipo().equals("ADMIN")){
                 return "redirect:/administrador";
            }
@@ -72,6 +73,7 @@ public class HomeController {
            }
         }
         else{
+            log.info("Nombre", model.getAttribute("nombre"));
             return "usuario/home";
         }
         
@@ -141,10 +143,11 @@ public class HomeController {
     }
     
     @GetMapping("/getCart")
-    public String getCart(Model model){
+    public String getCart(Model model, HttpSession httpSession){
         model.addAttribute("cart", listaDetallesOrden);
         model.addAttribute("orden", orden);
-        return "/usuario/carrito";
+        model.addAttribute("session", httpSession.getAttribute("idUsuario"));
+        return "usuario/carrito";
     }
 
     @GetMapping("/order")
@@ -173,16 +176,16 @@ public class HomeController {
         int id  = Integer.parseInt(httpSession.getAttribute("idUsuario").toString());
         Usuario usuario = usuarioService.findById(id).get();
         
-        orden.setUsuario(usuario);
 
-        ordenService.save(orden);
 
         for(DetalleOrden dt:listaDetallesOrden){
+            orden.setUsuario(usuario);
+            ordenService.save(orden);
             dt.setOrden(orden);
             detalleOrdenService.save(dt);
+            orden = new Orden();
         }
 
-        orden = new Orden();
         listaDetallesOrden.clear();
 
         log.info("Orden nueva",orden);
