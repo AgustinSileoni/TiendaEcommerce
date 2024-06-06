@@ -21,7 +21,9 @@
 
   <body>
 
-    <div th:insert="~{usuario/template_user.html::header}">
+    <div th:insert="~{/usuario/template_user.html::header-unknown}" th:if="${nombre == 'null'}"></div>
+
+    <div th:insert="~{/usuario/template_user.html::header-user}" th:unless="${nombre == 'null'}"></div>
 
     </div>
 

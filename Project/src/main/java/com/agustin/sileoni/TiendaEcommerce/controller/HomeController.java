@@ -73,7 +73,6 @@ public class HomeController {
            }
         }
         else{
-            log.info("Nombre", model.getAttribute("nombre"));
             return "usuario/home";
         }
         
